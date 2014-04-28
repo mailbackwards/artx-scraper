@@ -3,6 +3,8 @@ import re
 
 from bs4 import BeautifulSoup
 
+BASE_URL = "http://www.gardnermuseum.org"
+
 def make_soup(url): 
 	html = urlopen(url).read()
 	return BeautifulSoup(html)
@@ -63,7 +65,6 @@ def get_event_text(event_url):
 #### Currently, information gotten includes for each current exhibit, its title, date, location, and text 
 
 def scrape(): 
-	BASE_URL = "http://www.gardnermuseum.org"
 	currentExhibitions = [] #list for event links
 	eventInfo = {} #Dictionary stores ==> key (event/exhibition url): event/exhibition name, event date & loc, event descriptive text
 
