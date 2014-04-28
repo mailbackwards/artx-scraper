@@ -10,5 +10,8 @@ def hello():
 @app.route("/gardner", method=['GET'])
     return gardner_scraper.scrape()
 
+@app.route("/peabody", method=['GET'])
+	return peobody_scraper.scrape() 
+	
 if __name__ == "__main__":
     app.run()

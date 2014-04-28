@@ -47,7 +47,12 @@ def get_event_info(event_url):
 
 	return exhTitle, exhDatesLoc, text  
 
-## Get information from Peabody Essex Museum website ## 
+
+###############################
+#### Get information from Peabody Essex Museum website  
+#### More information can be added to the 'get_event_info' function to get Related Events, images, and more  
+#### Currently, the information for each current exhibit includes its name, date, location, and text 
+
 def scrape(): 
 	BASE_URL = "http://www.pem.org"
 	exhibitions = [] #list for event links, including upcoming, current, touring, etc. 

@@ -58,7 +58,10 @@ def get_event_text(event_url):
 	return text 
 
 
-## Get information from Isabella Gardner Museum website ## 
+###############################
+#### Get information from Isabella Gardner Museum website 
+#### Currently, information gotten includes for each current exhibit, its title, date, location, and text 
+
 def scrape(): 
 	BASE_URL = "http://www.gardnermuseum.org"
 	currentExhibitions = [] #list for event links
