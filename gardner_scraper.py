@@ -2,6 +2,7 @@ from urllib2 import urlopen
 import re 
 
 from bs4 import BeautifulSoup
+
 BASE_URL = "http://www.gardnermuseum.org"
 
 def make_soup(url): 

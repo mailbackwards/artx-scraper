@@ -1,10 +1,9 @@
-
 from urllib2 import urlopen
 import re 
 
 from bs4 import BeautifulSoup
-BASE_URL = "http://www.pem.org"
 
+BASE_URL = "http://www.pem.org"
 
 def make_soup(url): 
 	html = urlopen(url).read()
@@ -74,5 +73,3 @@ def scrape():
 	return eventInfo 
 	
 
-events = scrape() 
-print events 

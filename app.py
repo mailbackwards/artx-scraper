@@ -12,6 +12,9 @@ def hello():
 
 @app.route("/peabody", method=['GET'])
 	return peobody_scraper.scrape() 
-	
+
+@app.route("/harvard", method=['GET'])
+	return harvard_art_scraper.scrape() 
+
 if __name__ == "__main__":
     app.run()
