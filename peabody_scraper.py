@@ -1,3 +1,4 @@
+
 from urllib2 import urlopen
 import re 
 
@@ -47,22 +48,23 @@ def get_event_info(event_url):
 	return exhTitle, exhDatesLoc, text  
 
 ## Get information from Peabody Essex Museum website ## 
+def scrape(): 
+	BASE_URL = "http://www.pem.org"
+	exhibitions = [] #list for event links, including upcoming, current, touring, etc. 
+	eventInfo = {} #Dictionary stores ==> key (event/exhibition url): event/exhibition name, event date & loc, event descriptive text
 
-BASE_URL = "http://www.pem.org"
+	links = get_nav_links(BASE_URL) #get all navigation links from main page
+	for link in links: 
+		if re.match('(.*)exhibition', link, re.I): #find all links with exhibitions 
+			exhibitions = get_link_events(link) #all exhibition links 
 
-exhibitions = [] #list for event links, including upcoming, current, touring, etc. 
-eventInfo = {} #Dictionary stores ==> key (event/exhibition url): event/exhibition name, event date & loc, event descriptive text
+	for exh in exhibitions: 
+		if re.match('(.*)current', exh, re.I): #find the link for current events (this can be changed for other desired links)
+			currentExhUrl = exh # find current exhibitions link 
 
-links = get_nav_links(BASE_URL) #get all navigation links from main page
-for link in links: 
-	if re.match('(.*)exhibition', link, re.I): #find all links with exhibitions 
-		exhibitions = get_link_events(link) #all exhibition links 
+	currentExhs = get_exhibitions(currentExhUrl) # array of all current exhibition links 
+	for link in currentExhs: 
+		eventInfo[link] = get_event_info(link) # add all exhibition info to dictionary
 
-for exh in exhibitions: 
-	if re.match('(.*)current', exh, re.I): #find the link for current events (this can be changed for other desired links)
-		currentExhUrl = exh # find current exhibitions link 
-
-currentExhs = get_exhibitions(currentExhUrl) # array of all current exhibition links 
-for link in currentExhs: 
-	eventInfo[link] = get_event_info(link) # add all exhibition info to dictionary
-
+	return eventInfo 
+	

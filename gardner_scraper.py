@@ -59,19 +59,20 @@ def get_event_text(event_url):
 
 
 ## Get information from Isabella Gardner Museum website ## 
+def scrape(): 
+	BASE_URL = "http://www.gardnermuseum.org"
+	currentExhibitions = [] #list for event links
+	eventInfo = {} #Dictionary stores ==> key (event/exhibition url): event/exhibition name, event date & loc, event descriptive text
 
-BASE_URL = "http://www.gardnermuseum.org"
-currentExhibitions = [] #list for event links
-eventInfo = {} #Dictionary stores ==> key (event/exhibition url): event/exhibition name, event date & loc, event descriptive text
+	links = get_nav_links(BASE_URL) #get all navigation links from main page
+	for link in links: 
+		if re.match('(.*)exhibition', link, re.I): #find all links with exhibitions 
+			currentExhibitions.append(get_link_events(link)) #all current event links 
 
-links = get_nav_links(BASE_URL) #get all navigation links from main page
-for link in links: 
-	if re.match('(.*)exhibition', link, re.I): #find all links with exhibitions 
-		currentExhibitions.append(get_link_events(link)) #all current event links 
+	currentExhibitions = currentExhibitions[1:] # get rid of first in list, which is None
 
-currentExhibitions = currentExhibitions[1:] # get rid of first in list, which is None
+	for exhList in currentExhibitions: #iterate through to get to each exhibition link
+		for exh in exhList: 
+			eventInfo[exh] = get_event_info(exh), get_event_text(exh) # add information to dict with corresponding link
 
-for exhList in currentExhibitions: #iterate through to get to each exhibition link
-	for exh in exhList: 
-		eventInfo[exh] = get_event_info(exh), get_event_text(exh) # add information to dict with corresponding link
-
+	return eventInfo 
