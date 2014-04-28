@@ -3,6 +3,8 @@ from urllib2 import urlopen
 import re 
 
 from bs4 import BeautifulSoup
+BASE_URL = "http://www.pem.org"
+
 
 def make_soup(url): 
 	html = urlopen(url).read()
@@ -54,8 +56,6 @@ def get_event_info(event_url):
 #### Currently, the information for each current exhibit includes its name, date, location, and text 
 
 def scrape(): 
-	BASE_URL = "http://www.pem.org"
-	exhibitions = [] #list for event links, including upcoming, current, touring, etc. 
 	eventInfo = {} #Dictionary stores ==> key (event/exhibition url): event/exhibition name, event date & loc, event descriptive text
 
 	links = get_nav_links(BASE_URL) #get all navigation links from main page
@@ -73,3 +73,6 @@ def scrape():
 
 	return eventInfo 
 	
+
+events = scrape() 
+print events 

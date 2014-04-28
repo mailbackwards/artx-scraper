@@ -2,6 +2,7 @@ from urllib2 import urlopen
 import re 
 
 from bs4 import BeautifulSoup
+BASE_URL = "http://www.gardnermuseum.org"
 
 def make_soup(url): 
 	html = urlopen(url).read()
@@ -46,7 +47,7 @@ def get_event_info(event_url):
 	
 	exhDateLoc = date.text; # save dates and gallery location
 
-	return (exhName, exhDateLoc) 
+	return exhName, exhDateLoc
 
 # From event pages, get all descriptions/text 
 def get_event_text(event_url): 
@@ -63,7 +64,6 @@ def get_event_text(event_url):
 #### Currently, information gotten includes for each current exhibit, its title, date, location, and text 
 
 def scrape(): 
-	BASE_URL = "http://www.gardnermuseum.org"
 	currentExhibitions = [] #list for event links
 	eventInfo = {} #Dictionary stores ==> key (event/exhibition url): event/exhibition name, event date & loc, event descriptive text
 
@@ -77,5 +77,5 @@ def scrape():
 	for exhList in currentExhibitions: #iterate through to get to each exhibition link
 		for exh in exhList: 
 			eventInfo[exh] = get_event_info(exh), get_event_text(exh) # add information to dict with corresponding link
-
+	
 	return eventInfo 
