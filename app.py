@@ -11,15 +11,18 @@ def hello():
 
 @app.route("/gardner")
 def scrape_gardner():
-    return jsonify(gardner_scraper.scrape())
+    results = {"results": gardner_scraper.scrape()}
+    return jsonify(results)
 
 @app.route("/harvard")
 def scrape_harvard():
-	return jsonify(harvard_art_scraper.scrape())
+    results = {"results": harvard_art_scraper.scrape()}
+    return jsonify(results)
 
 @app.route("/peabody")
 def scrape_peabody():
-	return jsonify(peabody_scraper.scrape()) 
+    results = {"results": peabody_scraper.scrape()}
+    return jsonify(results) 
 
 if __name__ == "__main__":
     app.run(debug=True, port=7000)
