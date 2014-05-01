@@ -23,22 +23,27 @@ def get_link_events(link_url):
 	events = []
 	content = soup.find('div', {'id':'content'}) # find content to search  
 	for s in content.findAll('span'): # find tags for current works 
-		if not (s and s.string): 
-			continue 
-		if s.string == 'Current Exhibitions': #find all current exhibitions, disregard past
-			currentEvents = soup.find('ul', {'class': 'subnav_ul divided'}) #get current events links
-			eventLinks = [BASE_URL+ li.a["href"] for li in currentEvents.findAll("li")] 
-			events = events + eventLinks 
+		if re.match('(.*)current',s.text,re.I): #find all current exhibitions, disregard past exhibitions or events
+			parent = s.findParents('div')[0] # get most recent 'div' parent
+
+			for currentEvents in parent.findAll('ul', {'class': 'subnav_ul divided'}): #get current events links
+				eventLinks = [BASE_URL+ li.a["href"] for li in currentEvents.findAll("li")] 
+				events = events + eventLinks 
 	return events  	
 
 # From current exhibition links, get relevant dates and information
 def get_event_info(event_url): 
 	soup = make_soup(event_url) 
+
+	#GET NAME
+	name = "" 
 	content = soup.find('div', {'id':'content'}) # find content tag 
 	h1 = content.find('h1') # find title tag 
 	# em = h1.find('em')
-	exhName = h1.text # save exhibition name 
+	name = h1.text # save exhibition name 
 
+	
+	#GET DATE AND LOC
 	date = content.find('h4') #find date by this tag 
 	if not date: #otherwise, search for a different tag 
 		p = content.find('p', {'class': 'image_details'}) 
@@ -46,18 +51,23 @@ def get_event_info(event_url):
 		if not date: # no date found
 			date = "" 
 	
-	exhDateLoc = date.text; # save dates and gallery location
+	dateLoc = date.text; # save dates and gallery location
 
-	return exhName, exhDateLoc
 
-# From event pages, get all descriptions/text 
-def get_event_text(event_url): 
-	soup = make_soup(event_url)
-	div = soup.find('div', {'class': 'tab'}) # find div for paragraphs 
+	# GET DESCRIPTION
 	text = ""
+	div = soup.find('div', {'class': 'tab'}) # find div for paragraphs 
 	for p in div.findAll('p'): 
 		text += p.getText() + '\n' # add paragraph texts to empty string 
-	return text 
+
+	
+	# GET IMAGES URL
+	images = []
+	for img in content.findAll('img'): #Find all image tags 	
+		images.append(BASE_URL + img['src']) # add all images associated with event/exhibition
+
+	
+	return name, dateLoc, text, images 
 
 
 ###############################
@@ -66,7 +76,7 @@ def get_event_text(event_url):
 
 def scrape(): 
 	currentExhibitions = [] #list for event links
-	eventInfo = {} #Dictionary stores ==> key (event/exhibition url): event/exhibition name, event date & loc, event descriptive text
+	allEvents = []
 
 	links = get_nav_links(BASE_URL) #get all navigation links from main page
 	for link in links: 
@@ -77,6 +87,15 @@ def scrape():
 
 	for exhList in currentExhibitions: #iterate through to get to each exhibition link
 		for exh in exhList: 
-			eventInfo[exh] = get_event_info(exh), get_event_text(exh) # add information to dict with corresponding link
-	
-	return eventInfo 
+			#For each distinctive link: return dictionary with url, dates, description, image, and name labels
+			info = {} 	
+			name,dateLoc,text,images = get_event_info(exh) # get info 
+			info['url'] = exh; # add value for 'url' key 
+			info['dates'] = dateLoc 
+			info['description'] = text
+			info['image'] = images
+			info['name'] = name 
+			allEvents.append(info)  
+
+	return allEvents 
+

@@ -58,6 +58,7 @@ def scrape():
 			events = get_link_events(link) #all exhibition links 
 
 	for event in events: 
+		# For each distinctive link: return dictionary with url, dates, description, image, and name labels
 	 	eventInfo[event] = get_event_info(event) # add all exhibition info to dictionary
 
 	return eventInfo 
