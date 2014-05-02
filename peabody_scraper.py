@@ -48,7 +48,7 @@ def get_event_info(event_url):
 	
 	# GET EVENT DESCRIPTION 
 	text = "" # String to store all text for the exhibition 
-	for p in feature.findAll('p', {'style':'text-align: justify;'}): 
+	for p in feature.findAll('p'): 
 		text += p.getText() 
 
 	
