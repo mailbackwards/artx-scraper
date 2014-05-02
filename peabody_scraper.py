@@ -43,12 +43,13 @@ def get_event_info(event_url):
 	# GET DATES AND LOC
 	dateLoc = "" #String to store dates and location 
 	for dates in feature.findAll('p', {'class':'dates'}): # iterate through tags to get dates and location
-		dateLoc += dates.getText() 
+		dateLoc += dates.getText()
+		dateLoc += " "
 
 	
 	# GET EVENT DESCRIPTION 
 	text = "" # String to store all text for the exhibition 
-	for p in feature.findAll('p'): 
+	for p in feature.findAll('p', {'style':'text-align: justify;'}): 
 		text += p.getText() 
 
 	
