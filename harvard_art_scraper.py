@@ -34,13 +34,38 @@ def get_link_events(link_url):
 def get_event_info(event_url): 
 	soup = make_soup(event_url) 
 	section = soup.find('section', {'id': 'section-content'}) #General wrapper for all event details
+	time = "" 
+	loc = "" 
+	text = "" 
+	date = "" 
+	title = "" 
+
+	for content in section.findAll('div', {'class' :'content clearfix'}): 
+		for div in content.findAll('div'): 
+			if div.has_attr('class'): 
+				listTags = div['class'] #Filter for correct tag in all tags 
+
+				# GET ALL NAME, DATE, TIME, TEXT, IMAGE INFO 
+				for tag in listTags:  
+					if re.match('(.*)field-name-field(.*)-title',tag,re.I): #Match for title
+						title = div.find('div', {'class': 'field-item even'}).text 
+					if re.match('(.*)field-name-field(.*)date',tag,re.I): #Match for date
+						date = div.find('div', {'class': 'field-item even'}).text 
+					if re.match('(.*)field-name-field(.*)time',tag,re.I): #Match tag for time 
+						time = div.find('div', {'class': 'field-item even'}).text 
+					if re.match('(.*)field-name-field(.*)location',tag,re.I): #Match tag for location
+						loc = div.find('div', {'class': 'field-item even'}).text 
+					if re.match('(.*)field-(.*)summary',tag,re.I): #Match tag for text description
+						text = div.find('div', {'class': 'field-item even'}).text 
+					if re.match('(.*)field-name-field(.*)image$', tag, re.I):  #Match tag for image files 
+						if div.find('div', {'class': 'field-item even'}): 
+							img = div.find('div', {'class': 'field-item even'}).find('img')
+							image = img['src']
+				
+	date = date, time, loc # consolidate date, time, loc info 
+
+	return title, date, text, image 
 	
-	info = "" #String to store all info 
-
-	for item in section.findAll('div', {'class': 'field-item even'}): 
-		info += item.getText()
-
-	return info 
 
 
 
@@ -49,7 +74,7 @@ def get_event_info(event_url):
 #### Currently, all information for the event is captured 
 
 def scrape(): 
-	eventInfo = {} #Dictionary stores ==> key (event url): event name, event date & loc, event descriptive text
+	allEvents = [] #List for all dictionaries 
 
 	links = get_nav_links(BASE_URL) #get all navigation links from main page
 
@@ -58,8 +83,16 @@ def scrape():
 			events = get_link_events(link) #all exhibition links 
 
 	for event in events: 
-		# For each distinctive link: return dictionary with url, dates, description, image, and name labels
-	 	eventInfo[event] = get_event_info(event) # add all exhibition info to dictionary
+	 	#For each distinctive link: return dictionary with url, dates, description, image, and name labels
+			info = {} 	
+			name,dateLoc,text,images = get_event_info(event) # get info 
+			info['url'] = event; # add value for 'url' key 
+			info['dates'] = dateLoc 
+			info['description'] = text
+			info['image'] = images
+			info['name'] = name 
+			allEvents.append(info)  
+ 
 
-	return eventInfo 
-	
+	return allEvents 
+
