@@ -62,12 +62,10 @@ def get_event_info(event_url):
 
 	
 	# GET IMAGES URL
-	images = []
-	for img in content.findAll('img'): #Find all image tags 	
-		images.append(BASE_URL + img['src']) # add all images associated with event/exhibition
-
+	image_path = content.find('div', {'class': 'lightbox_img_link'}).find('img')['src']
+	image = BASE_URL + image_path
 	
-	return name, dateLoc, text, images 
+	return name, dateLoc, text, image
 
 
 ###############################
@@ -89,11 +87,11 @@ def scrape():
 		for exh in exhList: 
 			#For each distinctive link: return dictionary with url, dates, description, image, and name labels
 			info = {} 	
-			name,dateLoc,text,images = get_event_info(exh) # get info 
+			name,dateLoc,text,image = get_event_info(exh) # get info 
 			info['url'] = exh; # add value for 'url' key 
 			info['dates'] = dateLoc 
 			info['description'] = text
-			info['image'] = images
+			info['image'] = image
 			info['name'] = name 
 			allEvents.append(info)  
 
