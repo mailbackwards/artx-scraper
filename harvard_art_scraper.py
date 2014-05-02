@@ -63,7 +63,7 @@ def get_event_info(event_url):
 							img = div.find('div', {'class': 'field-item even'}).find('img')
 							image = img['src']
 				
-	date = date, time, loc # consolidate date, time, loc info 
+	date = date + time + loc # consolidate date, time, loc info 
 
 	return title, date, text, image 
 	
