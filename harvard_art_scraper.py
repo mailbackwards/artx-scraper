@@ -68,8 +68,6 @@ def get_event_info(event_url):
 	return title, date, text, image 
 	
 
-
-
 ###############################
 #### Get events information from Harvard Art Museums website 
 #### Currently, all information for the event is captured 
