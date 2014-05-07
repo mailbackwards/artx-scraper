@@ -24,10 +24,11 @@ def scrape_peabody():
     results = {"results": peabody_scraper.scrape()}
     return jsonify(results) 
 
-@app.route("/list")
+@app.route("/mfa")
 def scrape_list(): 
-	results = {"results": list_scraper.scrape()}
+	results = {"results": mfa_scraper.scrape()}
 	return jsonify(results)
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=7000)
