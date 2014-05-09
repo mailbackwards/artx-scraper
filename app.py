@@ -2,6 +2,10 @@ from flask import Flask, jsonify
 import gardner_scraper
 import peabody_scraper
 import harvard_art_scraper
+import cordova_scraper
+import mfa_scraper
+import rose_scraper
+import list_scraper
 
 app = Flask(__name__)
 
