@@ -34,6 +34,15 @@ def scrape_rose():
 	results = {"results": rose_scraper.scrape()}
 	return jsonify(results)
 
+@app.route("/cordova")
+def scrape_cordova(): 
+	results = {"results": cordova_scraper.scrape()}
+	return jsonify(results)
+
+@app.route("/list")
+def scrape_list(): 
+	results = {"results": list_scraper.scrape()}
+	return jsonify(results)
 
 if __name__ == "__main__":
     app.run(debug=True, port=7000)
