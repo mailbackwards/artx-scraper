@@ -25,8 +25,13 @@ def scrape_peabody():
     return jsonify(results) 
 
 @app.route("/mfa")
-def scrape_list(): 
+def scrape_mfa(): 
 	results = {"results": mfa_scraper.scrape()}
+	return jsonify(results)
+
+@app.route("/rose")
+def scrape_rose(): 
+	results = {"results": rose_scraper.scrape()}
 	return jsonify(results)
 
 
