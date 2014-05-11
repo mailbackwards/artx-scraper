@@ -56,10 +56,6 @@ def get_event_info(event_url):
 	# GET DATES AND LOC
 	date = ""
 	loc = ""
-	# box = showcase.find('div', {'class': 'red-box-links'})
-	# date = box.find('strong').getText() 
-	# match = box.find('p').getText() 
-	# loc = re.sub(date, '', match)  
 
 	
 	# GET EVENT DESCRIPTION 

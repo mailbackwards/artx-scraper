@@ -45,13 +45,12 @@ def get_event_info(event_url):
 	
 	#GET DATE AND LOC
 	date = ""
-	date = content.find('h4') #find date by this tag 
-	if not date: #otherwise, search for a different tag 
-		p = content.find('p', {'class': 'image_details'}) 
-		date =  p.find('strong')
-	
-	dateLoc = date.text.strip(); # save dates and gallery location
-
+	loc = ""
+	dateFound = content.find('p', {'class': 'image_details'}) # look for date
+	if not dateFound:  
+		date = content.find('h4').getText().strip() # other formatting for date possible
+	else: 
+		date = dateFound.getText().strip()  
 
 	# GET DESCRIPTION
 	text = ""
@@ -65,7 +64,7 @@ def get_event_info(event_url):
 	image_path = content.find('div', {'class': 'lightbox_img_link'}).find('img')['src']
 	image = (BASE_URL + image_path).strip() 
 	
-	return name, dateLoc, text, image
+	return name, date, loc, text, image
 
 
 ###############################
@@ -87,13 +86,19 @@ def scrape():
 		for exh in exhList: 
 			#For each distinctive link: return dictionary with url, dates, description, image, and name labels
 			info = {} 	
-			name,dateLoc,text,image = get_event_info(exh) # get info 
+			name,date, loc,text,image = get_event_info(exh) # get info 
 			info['url'] = exh; # add value for 'url' key 
-			info['dates'] = dateLoc 
+			info['dates'] = date
 			info['description'] = text
 			info['image'] = image
 			info['name'] = name 
+			info['location'] = loc
 			allEvents.append(info)  
 
 	return allEvents 
+
+
+a = scrape() 
+for dicti in a: 
+	print dicti['dates']
 
