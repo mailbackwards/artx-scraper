@@ -40,26 +40,32 @@ def get_event_info(event_url):
 	showcase = main.find('div', {'class': 'showcase'}) # For title, dates, location 
 	
 	# GET NAME
+	name = ""
 	name = showcase.find('h1').getText() # get exhibition title 
-	name.strip(' \t\n\r') # remove extra white space
+	name = re.sub('[\t\r\n]*', '', name) # remove extra white space
 
 	# GET DATES AND LOC
+	date = ""
+	loc = ""
 	box = showcase.find('div', {'class': 'red-box-links'})
-	date = box.find('strong').getText() 
+	date = box.find('strong').getText().strip() 
 	match = box.find('p').getText() 
-	loc = re.sub(date, '', match)  
+	loc = re.sub(date, '', match) # extract location from text gotten from date 
+	loc = loc.strip()  
 
 	
 	# GET EVENT DESCRIPTION 
+	text = ""
 	left = soup.find('div', {'id': 'mainLeftColumn'}) # To get text 
 	text = "" # String to store all text for the exhibition 
 	for p in left.findAll('p'): 
-		text += p.getText() 
+		text += p.getText().strip() 
 
 	
 	# GET IMAGE 
+	imageURL = ""
 	img = showcase.find('img') #Find image link 	
-	imageURL = BASE_URL + img['src']  # add all images associated with event/exhibition
+	imageURL = (BASE_URL + img['src']).strip()  # add all images associated with event/exhibition
 
 	return name, date, loc, text, imageURL  
 
@@ -92,4 +98,3 @@ def scrape():
 			allEvents.append(info)  
 
 	return allEvents 
-

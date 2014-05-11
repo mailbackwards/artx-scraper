@@ -38,13 +38,18 @@ def get_event_info(event_url):
 	info = feature.find('div', {'class': 'info'}) 
 	
 	# GET NAME
-	name = feature.find('h2').getText() # get exhibition title 
+	name = ""
+	name = feature.find('h2').getText().strip() # get exhibition title 
 
-	# GET DATES AND LOC
-	dateLoc = "" #String to store dates and location 
-	for dates in feature.findAll('p', {'class':'dates'}): # iterate through tags to get dates and location
-		dateLoc += dates.getText()
-		dateLoc += " "
+	# GET DATES
+	date = "" #String to store dates and location 
+	dates = feature.find('p', {'class':'dates'}) # get the first 'p' tag, which is date
+	date += dates.getText().strip() 
+
+	#GET LOCATION
+	loc = ""
+	locs = dates.findNextSibling() #second p tag is loc
+	loc += locs.getText().strip() 
 
 	
 	# GET EVENT DESCRIPTION 
@@ -54,12 +59,13 @@ def get_event_info(event_url):
 
 	
 	# GET IMAGE 
+	imageURL = ""
 	featureImg = soup.find('div', {'class': 'feature_image'}) # Find image tag 
 	img = feature.find('img') #Find all image tags 	
 	imageURL = BASE_URL + img['src']  # add all images associated with event/exhibition
 
 
-	return name, dateLoc, text, imageURL  
+	return name, date, loc, text, imageURL  
 
 
 ###############################
@@ -84,13 +90,15 @@ def scrape():
 		# For each distinctive exh: return dictionary with url, dates, description, image, and name labels
 			#For each distinctive url: return dictionary with url, dates, description, image, and name labels
 			info = {} 	
-			name,dateLoc,text,image = get_event_info(exh) # get info 
+			name,date, loc, text,image = get_event_info(exh) # get info 
 			info['url'] = exh; # add value for 'url' key 
-			info['dates'] = dateLoc 
+			info['dates'] = date
 			info['description'] = text
 			info['image'] = image
 			info['name'] = name 
+			info['location'] = loc
 			allEvents.append(info)  
 
 
 	return allEvents 
+

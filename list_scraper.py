@@ -42,25 +42,25 @@ def get_exhibition_info(exh_url):
 	name = ""
 	page = section.find('div', {'class':'page'}) # find content tag 
 	h1 = page.find('h1') # find title tag 
-	name = h1.text # save exhibition name 
+	name = h1.text.strip() # save exhibition name 
 	
 	#GET DATE AND LOC
 	date = ""
-	date = page.find('span',{'class':'subject'}).text # find date text 
+	date = page.find('span',{'class':'subject'}).text.strip() # find date text 
 	loc = ""
 	h2 = page.find('h2')
-	loc = h2.text 
+	loc = h2.text.strip()
 
 	# GET DESCRIPTION
 	text = ""
 	div = soup.find('div', {'class': 'body'}) # find div for paragraphs 
 	for p in div.findAll('p'): 
-		text += p.getText() # add paragraph texts to empty string 
+		text += p.getText().strip() # add paragraph texts to empty string 
 
 	# GET IMAGES URL
 	image = ""
 	img = section.find('li', {'class': 'active'})
-	image = img.find('img')['src']
+	image = (img.find('img')['src']).strip() 
 
 	return name, date, loc, text, image
 
@@ -91,3 +91,13 @@ def scrape():
 		allEvents.append(info)  
 
 	return allEvents 
+
+
+
+a = scrape() 
+for dicti in a: 
+	print dicti
+
+
+
+

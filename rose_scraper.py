@@ -49,8 +49,8 @@ def get_event_info(event_url):
 	text = content.find('div', {'id': 'contentText'})
 	for h2 in text.findAll('h2'):  # get exhibition title 
 		string = h2.getText() 
-		title = re.sub('\ufeff(\xa0)*\n', '', string) #remove whitespace and tabs 
-		name += title
+		title = re.sub('(\xa0)*\n', ':', string) #remove whitespace and tabs 
+		name += title.strip() 
 
 
 	# GET DATES AND LOC
@@ -66,13 +66,14 @@ def get_event_info(event_url):
 	body = content.find('tbody') # To get text 
 	text = "" # String to store all text for the exhibition 
 	for tr in body.findAll('tr'): 
-		text += tr.getText() 
+		text += tr.getText().strip() 
 
 	
 	# GET IMAGE 
 	img = body.find('img')['src'] #Find image link 
 	match = re.sub('../../','',img)
 	imageURL = BASE_URL + '/' + match  # add all images associated with event/exhibition
+	imageURL = imageURL.strip() 
 
 	return name, date, loc, text, imageURL  
 
@@ -105,3 +106,5 @@ def scrape():
 			allEvents.append(info)  
 
 	return allEvents 
+
+

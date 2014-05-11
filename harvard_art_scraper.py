@@ -49,23 +49,23 @@ def get_event_info(event_url):
 				# GET ALL NAME, DATE, TIME, TEXT, IMAGE INFO 
 				for tag in listTags:  
 					if re.match('(.*)field-name-field(.*)-title',tag,re.I): #Match for title
-						title = div.find('div', {'class': 'field-item even'}).text 
+						title = div.find('div', {'class': 'field-item even'}).text.strip() 
 					if re.match('(.*)field-name-field(.*)date',tag,re.I): #Match for date
-						date = div.find('div', {'class': 'field-item even'}).text 
+						date = div.find('div', {'class': 'field-item even'}).text.strip()  
 					if re.match('(.*)field-name-field(.*)time',tag,re.I): #Match tag for time 
-						time = div.find('div', {'class': 'field-item even'}).text 
+						time = div.find('div', {'class': 'field-item even'}).text.strip()  
 					if re.match('(.*)field-name-field(.*)location',tag,re.I): #Match tag for location
-						loc = div.find('div', {'class': 'field-item even'}).text 
+						loc = div.find('div', {'class': 'field-item even'}).text.strip()  
 					if re.match('(.*)field-(.*)summary',tag,re.I): #Match tag for text description
-						text = div.find('div', {'class': 'field-item even'}).text 
+						text = div.find('div', {'class': 'field-item even'}).text.strip()  
 					if re.match('(.*)field-name-field(.*)image$', tag, re.I):  #Match tag for image files 
 						if div.find('div', {'class': 'field-item even'}): 
 							img = div.find('div', {'class': 'field-item even'}).find('img')
-							image = img['src']
+							image = (img['src']).strip() 
 				
-	date = "%s %s %s" % (date, time, loc) # consolidate date, time, loc info 
+	date = "%s %s" % (date, time) # consolidate date, time info 
 
-	return title, date, text, image 
+	return title, date, loc, text, image 
 	
 
 ###############################
@@ -84,14 +84,17 @@ def scrape():
 	for event in events: 
 	 	#For each distinctive link: return dictionary with url, dates, description, image, and name labels
 			info = {} 	
-			name,dateLoc,text,images = get_event_info(event) # get info 
+			name,date, loc, text,images = get_event_info(event) # get info 
 			info['url'] = event; # add value for 'url' key 
-			info['dates'] = dateLoc 
+			info['dates'] = date
 			info['description'] = text
 			info['image'] = images
 			info['name'] = name 
+			info['location'] = loc 
 			allEvents.append(info)  
  
 
 	return allEvents 
 
+
+	

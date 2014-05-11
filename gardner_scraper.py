@@ -44,26 +44,26 @@ def get_event_info(event_url):
 
 	
 	#GET DATE AND LOC
+	date = ""
 	date = content.find('h4') #find date by this tag 
 	if not date: #otherwise, search for a different tag 
 		p = content.find('p', {'class': 'image_details'}) 
 		date =  p.find('strong')
-		if not date: # no date found
-			date = "" 
 	
-	dateLoc = date.text; # save dates and gallery location
+	dateLoc = date.text.strip(); # save dates and gallery location
 
 
 	# GET DESCRIPTION
 	text = ""
 	div = soup.find('div', {'class': 'tab'}) # find div for paragraphs 
 	for p in div.findAll('p'): 
-		text += p.getText() + '\n' # add paragraph texts to empty string 
+		text += p.getText().strip() # add paragraph texts to empty string 
 
 	
 	# GET IMAGES URL
+	image = ""
 	image_path = content.find('div', {'class': 'lightbox_img_link'}).find('img')['src']
-	image = BASE_URL + image_path
+	image = (BASE_URL + image_path).strip() 
 	
 	return name, dateLoc, text, image
 

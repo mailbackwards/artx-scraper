@@ -43,13 +43,14 @@ def get_event_info(event_url):
 	content = soup.find('div', {'id': 'content-area'})  #for info 
 	
 	# GET NAME
-	name = soup.find('h1').getText() # get exhibition title 
+	name = ""
+	name = soup.find('h1').getText().strip() # get exhibition title 
 
 	# GET DATES AND LOC
 	date = ""
 	if content.find('span', {'class': 'date-display-exhibit-time'}):  
 		span = content.find('span', {'class': 'date-display-exhibit-time'})
-		date = span.getText() 
+		date = span.getText().strip() 
 
 	loc = ""
 	
@@ -58,16 +59,17 @@ def get_event_info(event_url):
 	if content.find('div', {'class': 'tab-content'}): 
 		for tab in content.findAll('div', {'class': 'tab-content'}):  # To get text 
 			for p in tab.findAll('p'): 
-				text += p.getText() 
+				text += p.getText().strip() 
 
 	if content.find('div', {'class': 'field-body'}): 
 		body = content.find('div', {'class': 'field-body'})
 		for p in body.findAll('p'): 
-				text += p.getText() 
+				text += p.getText().strip()  
 	
 	# GET IMAGE 
+	imageURL = ""
 	img = content.find('div', {'class': 'field-exhibit-feature-image'}) #Find image link 	
-	imageURL = img.find('img')['src']  # add all images associated with event/exhibition
+	imageURL = img.find('img')['src'].strip()  # add all images associated with event/exhibition
 
 	return name, date, loc, text, imageURL  
 
@@ -100,3 +102,9 @@ def scrape():
 			allEvents.append(info)  
 
 	return allEvents 
+
+
+
+a = scrape() 
+for dicti in a: 
+	print dicti 
