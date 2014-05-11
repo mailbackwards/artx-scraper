@@ -96,9 +96,3 @@ def scrape():
 			allEvents.append(info)  
 
 	return allEvents 
-
-
-a = scrape() 
-for dicti in a: 
-	print dicti['dates']
-
