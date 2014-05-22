@@ -1,11 +1,5 @@
 from flask import Flask, jsonify
-import gardner_scraper
-import peabody_scraper
-import harvard_art_scraper
-import cordova_scraper
-import mfa_scraper
-import rose_scraper
-import list_scraper
+from scrapers import cordova, gardner, harvard_art, mit_list, mfa, peabody, rose
 
 app = Flask(__name__)
 
@@ -15,38 +9,35 @@ def hello():
 
 @app.route("/gardner")
 def scrape_gardner():
-    results = {"results": gardner_scraper.scrape()}
+    results = {"results": gardner.scrape()}
     return jsonify(results)
 
 @app.route("/harvard")
 def scrape_harvard():
-    results = {"results": harvard_art_scraper.scrape()}
+    results = {"results": harvard_art.scrape()}
     return jsonify(results)
 
 @app.route("/peabody")
 def scrape_peabody():
-    results = {"results": peabody_scraper.scrape()}
+    results = {"results": peabody.scrape()}
     return jsonify(results) 
 
 @app.route("/mfa")
 def scrape_mfa(): 
-	results = {"results": mfa_scraper.scrape()}
+	results = {"results": mfa.scrape()}
 	return jsonify(results)
 
 @app.route("/rose")
 def scrape_rose(): 
-	results = {"results": rose_scraper.scrape()}
+	results = {"results": rose.scrape()}
 	return jsonify(results)
 
 @app.route("/cordova")
 def scrape_cordova(): 
-	results = {"results": cordova_scraper.scrape()}
+	results = {"results": cordova.scrape()}
 	return jsonify(results)
 
 @app.route("/list")
 def scrape_list(): 
-	results = {"results": list_scraper.scrape()}
+	results = {"results": mit_list.scrape()}
 	return jsonify(results)
-
-if __name__ == "__main__":
-    app.run(debug=True, port=7000)

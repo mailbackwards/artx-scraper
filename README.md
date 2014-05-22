@@ -8,7 +8,7 @@ Requires [virtualenv](http://www.virtualenv.org/en/latest/).
 * `virtualenv .`
 * `. bin/activate`
 * `pip install -r requirements.txt`
-* `python app.py`
+* `python run.py`
 
 For use:
 
